@@ -16,7 +16,7 @@ movie_router = APIRouter()
     tags=["movies"],
     response_model=List[Movie],
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(JWTBearer())],
+    # dependencies=[Depends(JWTBearer())],
 )
 def get_movies() -> List[Movie]:
     db = Session()
