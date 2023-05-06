@@ -1,27 +1,44 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi.responses import HTMLResponse
+from config.database import engine, Base
+from middlewares.error_handler import ErrorHandler
+from routers.movie import movie_router
+from routers.user import user_router
 
 app = FastAPI()
+app.title = "Mi aplicación con  FastAPI"
+app.version = "0.0.1"
 
-class Msg(BaseModel):
-    msg: str
+app.add_middleware(ErrorHandler)
+app.include_router(movie_router)
+app.include_router(user_router)
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World. Welcome to FastAPI!"}
-
-
-@app.get("/path")
-async def demo_get():
-    return {"message": "This is /path endpoint, use a post request to transform the text to uppercase"}
+Base.metadata.create_all(bind=engine)
 
 
-@app.post("/path")
-async def demo_post(inp: Msg):
-    return {"message": inp.msg.upper()}
+movies = [
+    {
+        "id": 1,
+        "title": "Avatar",
+        "overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+        "year": "2009",
+        "rating": 7.8,
+        "category": "Acción",
+    },
+    {
+        "id": 2,
+        "title": "Avatar",
+        "overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+        "year": "2009",
+        "rating": 7.8,
+        "category": "Acción",
+    },
+]
 
 
-@app.get("/path/{path_id}")
-async def demo_get_path_id(path_id: int):
-    return {"message": f"This is /path/{path_id} endpoint, use post request to retrieve result"}
+@app.get("/", tags=["home"])
+def home() -> HTMLResponse:
+    """
+    Returns the home page with a "Hello world" message.
+    """
+    return HTMLResponse("<h1>Hello world</h1>")
