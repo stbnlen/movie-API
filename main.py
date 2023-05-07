@@ -24,29 +24,13 @@ app.include_router(user_router)
 Base.metadata.create_all(bind=engine)
 
 
-movies = [
-    {
-        "id": 1,
-        "title": "Avatar",
-        "overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
-        "year": "2009",
-        "rating": 7.8,
-        "category": "Acción",
-    },
-    {
-        "id": 2,
-        "title": "Avatar",
-        "overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
-        "year": "2009",
-        "rating": 7.8,
-        "category": "Acción",
-    },
-]
-
-
-@app.get("/", tags=["home"])
+@app.get(
+    "/",
+    tags=["home"],
+    description="Returns the home page with a 'Hello world' message.",
+)
 def home() -> HTMLResponse:
     """
     Returns the home page with a "Hello world" message.
     """
-    return HTMLResponse("<h1>Hello world</h1>")
+    return HTMLResponse(content="<h1>Hello world</h1>")

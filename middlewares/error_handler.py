@@ -1,4 +1,4 @@
-import logging
+from fastapi.logger import logger
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi import FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse
@@ -15,7 +15,7 @@ class ErrorHandler(BaseHTTPMiddleware):
         try:
             return await call_next(request)
         except Exception as e:
-            logging.exception("An error occurred")
+            logger.exception("An error occurred")
             return JSONResponse(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 content={"error": str(e)},
