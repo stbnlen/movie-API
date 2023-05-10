@@ -121,7 +121,7 @@ def update_movie(
     tags=["movies"],
     response_model=dict,
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(get_movie_service)],
+    dependencies=[Depends(get_movie_service), Depends(JWTBearer())],
 )
 def delete_movie(
     id: int, movie_service: MovieService = Depends(get_movie_service)
