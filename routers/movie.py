@@ -10,7 +10,7 @@ from schemas.movie import Movie
 movie_router = APIRouter()
 
 
-def get_db():
+def get_db() -> None:
     db = Session()
     try:
         yield db
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-def get_movie_service(db: Session = Depends(get_db)):
+def get_movie_service(db: Session = Depends(get_db)) -> MovieService:
     return MovieService(db)
 
 
@@ -28,7 +28,6 @@ def get_movie_service(db: Session = Depends(get_db)):
     response_model=List[Movie],
     status_code=status.HTTP_200_OK,
     dependencies=[Depends(get_movie_service)],
-    # dependencies=[Depends(JWTBearer())],
 )
 def get_movies(movie_service: MovieService = Depends(get_movie_service)) -> List[Movie]:
     result = movie_service.get_movies()
